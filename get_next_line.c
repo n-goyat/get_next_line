@@ -6,7 +6,7 @@
 /*   By: ngoyat <ngoyat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 14:26:42 by ngoyat            #+#    #+#             */
-/*   Updated: 2024/04/10 16:43:24 by ngoyat           ###   ########.fr       */
+/*   Updated: 2024/04/11 11:51:38 by ngoyat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,62 +30,45 @@ char	*ft_strdup(const char *s1)
 	tmp[i] = 0;
 	return (tmp);
 }
-
-char	*ft_refresh(char *stash)
+char	*ft_free(char **str)
 {
-	int		i;
-	int		j;
-	char	*new;
-
-	j = 0;
-	i = 0;
-	while (stash[i] && stash[i] != '\n')
-		i++;
-	if (!stash[i])
-		return (free(stash), NULL);
-	new = malloc(ft_strlen(stash) - i + 1);
-	if (new == NULL)
-		return (free(stash), NULL);
-	i++;
-	while (stash[i])
-		new[j++] = stash[i++];
-	new[j] = '\0';
-	free(stash);
-	return (new);
+	free(*str);
+	*str = NULL;
+	return (NULL);
 }
 
-char	*line_extracter(char *stash, int len)
+char	*clean_storage(char *storage)
 {
-	int		i;
-	char	*line;
+	char	*new_storage;
+	char	*ptr;
+	int		len;
 
-	i = 0;
-	line = malloc(len * sizeof(char) + 2);
-	if (!len)
-		return (NULL);
-	if (!stash)
-		return (free(stash), NULL);
-	while (stash && stash[i] != '\n')
+	ptr = ft_strchr(storage, '\n');
+	if (!ptr)
 	{
-		line[i] = stash[i];
-		i++;
+		new_storage = NULL;
+		return (ft_free(&storage));
 	}
-	line[i + 1] = '\n';
-	line[i] = '\0';
-	free(stash);
-	// printf("test");
-	return (line);
+	else
+		len = (ptr - storage) + 1;
+	if (!storage[len])
+		return (ft_free(&storage));
+	new_storage = ft_substr(storage, len, ft_strlen(storage) - len);
+	ft_free(&storage);
+	if (!new_storage)
+		return (NULL);
+	return (new_storage);
 }
 
 char	*get_next_line(int fd)
 {
 	char		buf[BUFFER_SIZE + 1];
 	static char	*stash;
-	char		*line; //extracted line
 	int			bytes_read;
-	// char		*temp;
+	char		*temp;
 	int			len_newline;
 
+	char *line; // extracted line
 	line = NULL;
 	if (!stash)
 		stash = ft_strdup("");
@@ -111,47 +94,47 @@ char	*get_next_line(int fd)
 			break ;
 		buf[bytes_read] = '\0';
 		stash = ft_strjoin(stash, buf);
-		// if (ft_strchr(stash, '\n'))
-		// {
-		// 	line = ft_substr(stash, 0, ft_strnlen(stash, '\n') + 1);
-		// 	temp = ft_substr(stash, ft_strnlen(line, '\0'), (ft_strnlen(stash,
-		// 					'\0') - ft_strnlen(line, '\0')));
-		// 	stash = temp;
-		// 	free(temp);
-		// }
-		len_newline = 0;
 		if (ft_strchr(stash, '\n'))
 		{
-			while (stash[len_newline] != '\n')
-				len_newline++;
-			line = line_extracter(stash, len_newline);
-			return (line);
-			// stash = ft_refresh(stash);
+			line = ft_substr(stash, 0, ft_strnlen(stash, '\n') + 1);
+			temp = ft_substr(stash, ft_strnlen(line, '\0'), (ft_strnlen(stash,
+							'\0') - ft_strnlen(line, '\0')));
+			stash = temp;
+			free(temp);
 		}
-		stash = ft_refresh(stash);
+		// len_newline = 0;
+		// if (ft_strchr(stash, '\n'))
+		// {
+		// 	while (stash[len_newline] != '\n')
+		// 		len_newline++;
+		// 	line = line_extracter(stash, len_newline);
+		// 	return (line);
+		// 	// stash = ft_refresh(stash);
 	}
-	// stash = ft_refresh(stash);
+	stash = clean_storage(stash);
 	return (line);
 }
+// stash = ft_refresh(stash);
 
-// int	main(void)
-// {
-// 	int		fd;
-// 	char	*str;
-// 	int		i;
 
-// 	fd = open("text.txt", O_RDONLY);
-// 	str = get_next_line(fd);
-// 	i = 0;
-// 	while (i < 4)
-// 	{
-// 		printf("output: %s", str);
-// 		str = get_next_line(fd);
-// 		i++;
-// 	}
-// 	close(fd);
-// 	return (0);
-// }
+int	main(void)
+{
+	int		fd;
+	char	*str;
+	int		i;
+
+	fd = open("text.txt", O_RDONLY);
+	str = get_next_line(fd);
+	i = 0;
+	while (i < 4)
+	{
+		printf("output: %s", str);
+		str = get_next_line(fd);
+		i++;
+	}
+	close(fd);
+	return (0);
+}
 
 // int	main(void)
 // {
