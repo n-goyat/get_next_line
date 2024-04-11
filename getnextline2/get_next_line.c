@@ -6,7 +6,7 @@
 /*   By: ngoyat <ngoyat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 14:26:42 by ngoyat            #+#    #+#             */
-/*   Updated: 2024/04/11 18:20:40 by ngoyat           ###   ########.fr       */
+/*   Updated: 2024/04/11 18:24:20 by ngoyat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ char	*ft_update(char *buffer)
 	}
 	// len of file - len of firstline + 1
 	line = ft_calloc((ft_strlen(buffer) - i + 1), sizeof(char));
+	if (!line)
+		return (free(buffer), NULL);
 	i++;
 	j = 0;
 	// line == buffer
@@ -104,7 +106,7 @@ char	*read_file(int fd, char *res)
 		buffer[bytes_read] = 0;
 		res = ft_join(res, buffer);
 		if (!res)
-			return (free(res), free(buffer), NULL);
+			return (free(buffer), NULL);
 		if (ft_strchr(buffer, '\n'))
 			break ;
 	}
