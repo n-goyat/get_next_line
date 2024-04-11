@@ -6,7 +6,7 @@
 /*   By: ngoyat <ngoyat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 17:48:21 by ngoyat            #+#    #+#             */
-/*   Updated: 2024/04/11 14:15:31 by ngoyat           ###   ########.fr       */
+/*   Updated: 2024/04/11 17:32:08 by ngoyat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,8 @@ void	ft_bzero(void *s, size_t n)
 	size_t	i;
 
 	str = (char *)s;
+	if (!str)
+		return ;
 	i = 0;
 	while (i < n)
 	{
