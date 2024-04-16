@@ -6,7 +6,7 @@
 /*   By: ngoyat <ngoyat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 14:26:42 by ngoyat            #+#    #+#             */
-/*   Updated: 2024/04/16 18:04:23 by ngoyat           ###   ########.fr       */
+/*   Updated: 2024/04/16 18:35:09 by ngoyat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,7 @@ char	*read_file(int fd, char *old_buffer)
 	if (!new_buffer)
 		return (NULL);
 	bytes_read = 1;
-	if (ft_strchr(new_buffer, '\n'))
-		bytes_read = 0;
-	while (bytes_read > 0)
+	while (bytes_read > 0 && !ft_strchr(new_buffer, '\n'))
 	{
 		bytes_read = read(fd, old_buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
