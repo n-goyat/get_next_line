@@ -6,7 +6,7 @@
 /*   By: ngoyat <ngoyat@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/08 14:26:42 by ngoyat            #+#    #+#             */
-/*   Updated: 2024/04/16 18:35:09 by ngoyat           ###   ########.fr       */
+/*   Updated: 2024/04/24 16:11:42 by ngoyat           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ char	*ft_join(char *old_buffer, char *new_buffer)
 	return (temp);
 }
 
-// delete line find
 void	ft_update_buffer(char *buffer)
 {
 	int		i;
@@ -40,31 +39,6 @@ void	ft_update_buffer(char *buffer)
 	while (buffer[i])
 		buffer[j++] = buffer[i++];
 	buffer[j] = 0;
-}
-
-// take line for return
-char	*ft_line(char *buffer)
-{
-	char	*line;
-	int		i;
-
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
-		i++;
-	if (buffer[i] == '\n')
-		i++;
-	line = ft_calloc(i + 1, sizeof(char));
-	if (!line)
-		return (free(line), NULL);
-	i = 0;
-	while (buffer[i] && buffer[i] != '\n')
-	{
-		line[i] = buffer[i];
-		i++;
-	}
-	if (buffer[i] && buffer[i] == '\n')
-		line[i++] = '\n';
-	return (line);
 }
 
 char	*read_file(int fd, char *old_buffer)
